@@ -7,7 +7,7 @@ function Header() {
     <Navbar style={{ background: "white" }} className="border-2">
       <Link to="/">
         <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-3 py-1 font-semibold text-white rounded-lg">
-          Home
+          Blog-Site
         </span>
       </Link>
       <form>
@@ -35,8 +35,8 @@ function Header() {
         >
           <FaMoon />
         </Button>
-        <Link to="/signin">
-          <Button className="rounded-xl" gradientDuoTone="purpleToBlue">
+        <Link to="/signup">
+          <Button outline gradientDuoTone="purpleToBlue">
             Sign Up
           </Button>
         </Link>

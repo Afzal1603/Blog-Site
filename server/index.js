@@ -3,12 +3,14 @@ const express = require("express");
 const dbConnect = require("./config/db");
 const userRouter = require("./routes/user.routes");
 const app = express();
+const cors = require("cors");
 //-------------------------------------------------------------------------
 
 const PORT = process.env.PORT || 5000;
 dbConnect();
 //-------------------------------------------------------------------------
 app.use(express.json());
+app.use(cors());
 app.use("/api/user", userRouter);
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -18,6 +20,7 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
 //-------------------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
