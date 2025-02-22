@@ -1,5 +1,5 @@
 import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
@@ -11,6 +11,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
@@ -21,7 +22,7 @@ function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/signup",
+        "http://localhost:5000/api/auth/signup",
         {
           name: name.trim(),
           email: email.trim(),
@@ -32,6 +33,7 @@ function SignUp() {
       setName("");
       setEmail("");
       setPassword("");
+      navigate("/signin");
     } catch (error) {
       console.log(error);
       toast.error("Signup failed. Please try again.");
