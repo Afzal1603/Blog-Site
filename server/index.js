@@ -14,11 +14,16 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
 app.use(cookieParser());
 app.use("/api/auth", authRouter);
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

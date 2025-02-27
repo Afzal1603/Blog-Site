@@ -58,4 +58,42 @@ const signIn = async (req, res, next) => {
     return next(errorHandler(500, error.message));
   }
 };
-module.exports = { signUp, signIn };
+const googleSign = async (req, res, next) => {
+  const { name, email, image } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      setToken(res, { id: user._id, email: user.email });
+
+      return res.status(200).json({
+        success: true,
+        message: "User logged in successfully",
+        user: { ...user._doc, password: undefined },
+      });
+    } else {
+      const randomPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(randomPassword, 12);
+      username =
+        name.toLowerCase().split(" ").join("") +
+        Math.random().toString(9).slice(-3);
+      const user = await User.create({
+        name: username,
+        email,
+        password: hashedPassword,
+        image,
+      });
+      setToken(res, { id: user._id, email: user.email });
+      return res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        user: { ...user._doc, password: undefined },
+        image,
+      });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+module.exports = { signUp, signIn, googleSign };

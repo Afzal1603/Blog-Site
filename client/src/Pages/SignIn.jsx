@@ -12,6 +12,7 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice";
+import OAuth from "../Component/OAuth";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ function SignIn() {
         { withCredentials: true }
       );
 
-      dispatch(signInSuccess(response.data));
+      dispatch(signInSuccess(response.data.user));
       setEmail("");
       setPassword("");
       toast.success(response.data.message);
@@ -115,6 +116,7 @@ function SignIn() {
               {loading ? <Loader className="animate-spin w-5 h-5" /> : "Submit"}
             </motion.span>
           </Button>
+          <OAuth></OAuth>
         </form>
         <div className="flex gap-2 ml-2 mt-2">
           <span>Don't have an account?</span>

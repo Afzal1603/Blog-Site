@@ -6,6 +6,8 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { motion } from "motion/react";
 import { Loader } from "lucide-react";
+import OAuth from "../Component/OAuth";
+
 function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,7 +35,7 @@ function SignUp() {
       setName("");
       setEmail("");
       setPassword("");
-      navigate("/signin");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error("Signup failed. Please try again.");
@@ -102,6 +104,7 @@ function SignUp() {
               {loading ? <Loader className="animate-spin" /> : "Submit"}
             </motion.span>
           </Button>
+          <OAuth></OAuth>
         </form>
         <div className="flex gap-2 ml-2 mt-2">
           <span>Already have an account?</span>
