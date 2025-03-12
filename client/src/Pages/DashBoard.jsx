@@ -2,6 +2,7 @@ import SideBar from "../Component/Sidebar";
 import DashProfile from "../Component/DashProfile";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 function DashBoard() {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -15,6 +16,7 @@ function DashBoard() {
         <SideBar></SideBar>
       </div>
       <div className="w-full">{tab === "profile" && <DashProfile />}</div>
+      <ToastContainer position="top-right" autoClose={5000} />
     </div>
   );
 }

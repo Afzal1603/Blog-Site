@@ -5,6 +5,7 @@ const authRouter = require("./routes/routes");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const userRouter = require("./routes/user");
 //-------------------------------------------------------------------------
 
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use("/api/auth", authRouter);
+app.use("/user", userRouter);
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
   next();

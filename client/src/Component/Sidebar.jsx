@@ -24,9 +24,11 @@ const SideBar = () => {
               Profile
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item href="#" icon={HiArrowCircleLeft}>
-            Sign Out
-          </Sidebar.Item>
+          <Link to={"/"}>
+            <Sidebar.Item href="#" icon={HiArrowCircleLeft}>
+              Back
+            </Sidebar.Item>
+          </Link>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>

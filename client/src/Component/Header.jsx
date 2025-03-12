@@ -4,10 +4,31 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/theme";
+import axios from "axios";
+import { updateSuccess } from "../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/signout",
+        {},
+        { withCredentials: true } // ✅ Ensures cookies are included
+      );
+      // console.log("Logged out:", res.data);
+      toast.success(res.data.message);
+      dispatch(updateSuccess(null));
+
+      navigate("/signin");
+    } catch (error) {
+      console.log("Logout failed:", error);
+    }
+  };
   return (
     <Navbar className="border-2">
       <Link to="/">
@@ -63,7 +84,7 @@ function Header() {
               <Dropdown.Item>My Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider></Dropdown.Divider>
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/signin">

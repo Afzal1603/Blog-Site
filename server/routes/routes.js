@@ -4,9 +4,11 @@ const {
   signIn,
   signUp,
   googleSign,
+  signOut,
 } = require("../controllers/user.controller");
 
 authRouter.post("/signup", signUp);
 authRouter.post("/signin", signIn);
+authRouter.post("/signout", signOut);
 authRouter.post("/google", googleSign);
 module.exports = authRouter;

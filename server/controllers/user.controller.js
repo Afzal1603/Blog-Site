@@ -47,28 +47,35 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(errorHandler(400, "Invalid email or password"));
     }
-    setToken(res, { id: user._id, email: user.email });
+    const token = setToken(res, { id: user._id, email: user.email });
 
     return res.status(200).json({
       success: true,
       message: "User logged in successfully",
-      user: { ...user._doc, password: undefined },
+      user: { ...user._doc, password: undefined, token },
     });
   } catch (error) {
     return next(errorHandler(500, error.message));
   }
 };
+const signOut = async (req, res, next) => {
+  res.clearCookie("token");
+  return res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
+};
+
 const googleSign = async (req, res, next) => {
   const { name, email, image } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) {
-      setToken(res, { id: user._id, email: user.email });
+      const token = setToken(res, { id: user._id, email: user.email });
 
       return res.status(200).json({
         success: true,
         message: "User logged in successfully",
-        user: { ...user._doc, password: undefined },
+        user: { ...user._doc, password: undefined, token },
       });
     } else {
       const randomPassword =
@@ -84,11 +91,11 @@ const googleSign = async (req, res, next) => {
         password: hashedPassword,
         image,
       });
-      setToken(res, { id: user._id, email: user.email });
+      const token = setToken(res, { id: user._id, email: user.email });
       return res.status(201).json({
         success: true,
         message: "User created successfully",
-        user: { ...user._doc, password: undefined },
+        user: { ...user._doc, password: undefined, token },
         image,
       });
     }
@@ -96,4 +103,4 @@ const googleSign = async (req, res, next) => {
     return next(error);
   }
 };
-module.exports = { signUp, signIn, googleSign };
+module.exports = { signUp, signIn, googleSign, signOut };
