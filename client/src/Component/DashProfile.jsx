@@ -4,13 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOutSuccess,
 } from "../redux/user/userSlice";
 import { toast, ToastContainer } from "react-toastify";
+
 const DashProfile = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
@@ -53,11 +58,9 @@ const DashProfile = () => {
   };
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    // console.log(formData);
-    // console.log(Object.keys(formData).length);
-    // console.log(currentUser._id);
+
     if (Object.keys(formData).length === 0) return;
-    // console.log("Token being sent:", currentUser?.token);
+
     console.log(document.cookie);
     try {
       dispatch(updateStart());
@@ -81,6 +84,8 @@ const DashProfile = () => {
     }
   };
   const handleDelete = async () => {
+    dispatch(deleteUserStart());
+
     console.log(currentUser._id);
     try {
       const res = await axios.delete(
@@ -93,11 +98,12 @@ const DashProfile = () => {
           },
         }
       );
+
       console.log(res.data);
-      dispatch(updateSuccess(null));
-      toast.success(res.data.message);
+      dispatch(deleteUserSuccess(res.data));
       navigate("/signin");
     } catch (error) {
+      dispatch(deleteUserFailure(error.message));
       console.log(error);
     }
   };
@@ -108,9 +114,10 @@ const DashProfile = () => {
         {},
         { withCredentials: true } // ✅ Ensures cookies are included
       );
+      dispatch(signOutSuccess(null));
 
       toast.success(res.data.message);
-      dispatch(updateSuccess(null));
+      dispatch(signOutSuccess());
 
       navigate("/signin");
     } catch (error) {
@@ -173,6 +180,15 @@ const DashProfile = () => {
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
           Update
         </Button>
+        {currentUser.isAdmin ? (
+          <Link to="/create-post" className=" w-auto">
+            <Button className="w-full" gradientDuoTone="greenToBlue" outline>
+              Create Post
+            </Button>
+          </Link>
+        ) : (
+          ""
+        )}
       </form>
       <div className="flex justify-between text-red-500 mx-8 mt-2">
         <span

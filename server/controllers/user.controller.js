@@ -47,7 +47,11 @@ const signIn = async (req, res, next) => {
     if (!isMatch) {
       return next(errorHandler(400, "Invalid email or password"));
     }
-    const token = setToken(res, { id: user._id, email: user.email });
+    const token = setToken(res, {
+      id: user._id,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
 
     return res.status(200).json({
       success: true,
@@ -70,7 +74,11 @@ const googleSign = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = setToken(res, { id: user._id, email: user.email });
+      const token = setToken(res, {
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
 
       return res.status(200).json({
         success: true,
@@ -91,7 +99,11 @@ const googleSign = async (req, res, next) => {
         password: hashedPassword,
         image,
       });
-      const token = setToken(res, { id: user._id, email: user.email });
+      const token = setToken(res, {
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
       return res.status(201).json({
         success: true,
         message: "User created successfully",
