@@ -1,7 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { HiUser, HiArrowCircleLeft } from "react-icons/hi";
+import { HiUser, HiArrowCircleLeft, HiDocument } from "react-icons/hi";
 import { useSelector } from "react-redux";
 const SideBar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -14,7 +14,7 @@ const SideBar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup className="md:flex md:flex-col md:gap-0.5">
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
@@ -24,6 +24,11 @@ const SideBar = () => {
               as="div"
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to={"/dashboard?tab=posts"}>
+            <Sidebar.Item active={tab === "posts"} icon={HiDocument} as="div">
+              Posts
             </Sidebar.Item>
           </Link>
           <Link to={"/"}>
