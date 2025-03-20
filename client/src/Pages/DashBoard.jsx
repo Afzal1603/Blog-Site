@@ -16,7 +16,7 @@ function DashBoard() {
       <div className="">
         <SideBar></SideBar>
       </div>
-      <div className="w-full">
+      <div className="w-full overflow-x-scroll">
         {tab === "profile" && <DashProfile />}
         {tab === "posts" && <DashPosts />}
       </div>
