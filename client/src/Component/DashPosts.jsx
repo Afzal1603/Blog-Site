@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Table } from "flowbite-react";
+import { Table, Modal, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
-
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { toast, ToastContainer } from "react-toastify";
 const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
   const handleBtnClick = async () => {
     const startIndex = posts.length;
     const res = await axios.get(
@@ -43,6 +46,33 @@ const DashPosts = () => {
     };
   }, [currentUser]);
 
+  const handleDelete = async () => {
+    try {
+      setShowModal(false);
+      const res = await axios.delete(
+        `http://localhost:5000/post/deletepost/${postToDelete}/${currentUser._id}`,
+        {
+          withCredentials: true, // ✅ Ensures cookies are sent
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        setPosts((prev) => prev.filter((post) => post._id !== postToDelete));
+      } else {
+        toast.error("Post can't be deleted");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("Failed to delete post. Please try again.");
+      setShowModal(false);
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-sc md:mx-auto p-3 scrollbar">
       {currentUser?.isAdmin && posts.length > 0 ? (
@@ -77,7 +107,13 @@ const DashPosts = () => {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell className="font-medium text-red-500 hover:underline hover:cursor-pointer">
+                  <Table.Cell
+                    onClick={() => {
+                      setPostToDelete(post._id);
+                      setShowModal(true);
+                    }}
+                    className="font-medium text-red-500 hover:underline hover:cursor-pointer"
+                  >
                     Delete
                   </Table.Cell>
                   <Table.Cell className="font-medium text-teal-500 hover:underline hover:cursor-pointer">
@@ -100,6 +136,39 @@ const DashPosts = () => {
       ) : (
         <p>No Post to show.</p>
       )}
+
+      {showModal && (
+        <Modal
+          show={showModal}
+          size="md"
+          onClose={() => setShowModal(false)}
+          popup={true}
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="text-6xl text-gray-400 mx-auto mb-4" />
+              <h3 className="mb-5 text-lg font-normal text-gray-500">
+                Are you sure you want to delete your account?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <Button color="failure" outline onClick={handleDelete}>
+                  Yes,I am sure
+                </Button>
+                <Button
+                  color="gray"
+                  outline
+                  onClick={() => setShowModal(false)}
+                >
+                  {" "}
+                  No,Cancel
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
+      <ToastContainer />
     </div>
   );
 };

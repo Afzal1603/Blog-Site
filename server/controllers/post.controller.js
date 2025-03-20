@@ -65,4 +65,21 @@ const getPosts = async (req, res, next) => {
   }
 };
 
-module.exports = { createPost, getPosts };
+const deletePost = async (req, res, next) => {
+  console.log("Request user:", req.user); // ✅ Debugging step
+  console.log("Params:", req.params);
+
+  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+    return next(errorHandler(403, "User not authenticated"));
+  }
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Post deleted successfully" });
+  } catch (error) {
+    return next(error);
+  }
+};
+module.exports = { createPost, getPosts, deletePost };
