@@ -82,4 +82,38 @@ const deletePost = async (req, res, next) => {
     return next(error);
   }
 };
-module.exports = { createPost, getPosts, deletePost };
+const updatePost = async (req, res, next) => {
+  if (!req.user.isAdmin) return next(errorHandler(403, "Unauthorized"));
+  if (!req.params.postId) return next(errorHandler(400, "Post ID is required"));
+  if (!req.body.title || !req.body.content)
+    return next(errorHandler(400, "All input fields are required"));
+
+  const slug = req.body.title
+    .split(" ")
+    .join("-")
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "");
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        ...req.body,
+        slug,
+        userId: req.params.userId,
+      },
+      { new: true }
+    );
+
+    if (!updatedPost) return next(errorHandler(404, "Post not found"));
+
+    return res.status(200).json({
+      success: true,
+      post: updatedPost,
+      message: "Post updated successfully",
+    });
+  } catch (error) {
+    return next(errorHandler(500, error.message));
+  }
+};
+
+module.exports = { createPost, getPosts, deletePost, updatePost };

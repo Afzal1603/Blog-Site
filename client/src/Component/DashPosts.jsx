@@ -11,6 +11,7 @@ const DashPosts = () => {
   const [showPosts, setShowPosts] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
+
   const handleBtnClick = async () => {
     const startIndex = posts.length;
     const res = await axios.get(
@@ -117,7 +118,7 @@ const DashPosts = () => {
                     Delete
                   </Table.Cell>
                   <Table.Cell className="font-medium text-teal-500 hover:underline hover:cursor-pointer">
-                    Edit
+                    <Link to={`/update-post/${post._id}`}>Edit</Link>
                   </Table.Cell>
                 </Table.Row>
               ))}

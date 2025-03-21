@@ -4,6 +4,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import DashBoard from "./Pages/DashBoard";
 import Header from "./Component/Header";
+import { UpdatePost } from "./Pages/UpdatePost";
 import PrivateRoute from "./Component/PrivateRoute";
 import OnlyAdminRoute from "./Component/OnlyAdminRoute";
 import { CreatePost } from "./Pages/CreatePost";
@@ -20,6 +21,7 @@ function App() {
         </Route>
         <Route element={<OnlyAdminRoute />}>
           <Route path="/create-post" element={<CreatePost />}></Route>
+          <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
         </Route>
       </Routes>
     </>
