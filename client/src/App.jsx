@@ -8,6 +8,7 @@ import { UpdatePost } from "./Pages/UpdatePost";
 import PrivateRoute from "./Component/PrivateRoute";
 import OnlyAdminRoute from "./Component/OnlyAdminRoute";
 import { CreatePost } from "./Pages/CreatePost";
+import Post from "./Pages/Post";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
         <Route element={<OnlyAdminRoute />}>
           <Route path="/create-post" element={<CreatePost />}></Route>
           <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
+          <Route path="/post/:slug" element={<Post />}></Route>
         </Route>
       </Routes>
     </>
