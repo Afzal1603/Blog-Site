@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DashPosts from "../Component/DashPosts";
 import { ToastContainer } from "react-toastify";
+import DashUsers from "../Component/DashUsers";
 function DashBoard() {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -19,6 +20,7 @@ function DashBoard() {
       <div className="w-full overflow-x-scroll">
         {tab === "profile" && <DashProfile />}
         {tab === "posts" && <DashPosts />}
+        {tab === "users" && <DashUsers />}
       </div>
       {/* <div className="w-full"></div> */}
       <ToastContainer position="top-right" autoClose={5000} />

@@ -111,17 +111,32 @@ const getUsers = async (req, res, next) => {
     const lastMonthUsers = await User.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
-    return res
-      .status(200)
-      .json({
-        success: true,
-        users: usersWithoutPass,
-        totalUsers,
-        lastMonthUsers,
-      });
+    return res.status(200).json({
+      success: true,
+      users: usersWithoutPass,
+      totalUsers,
+      lastMonthUsers,
+    });
   } catch (error) {
     return next(errorHandler(500, "Something went wrong"));
   }
 };
+const delete_User = async (req, res, next) => {
+  if (!req.user.isAdmin || req.user.id !== req.params.adminId) {
+    return next(errorHandler(403, "Unauthenticated"));
+  }
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.userId);
+    if (!deletedUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    return next(errorHandler(500, "Failed to delete user"));
+  }
+};
 
-module.exports = { update, deleteUser, getUsers };
+module.exports = { update, deleteUser, getUsers, delete_User };

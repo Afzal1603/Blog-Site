@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Loader, ArrowLeft } from "lucide-react";
+import CallToAction from "../Component/CallToAction";
 const Post = () => {
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
@@ -48,12 +49,14 @@ const Post = () => {
           {post.content}
         </p>
       </div>
+      <CallToAction></CallToAction>
       <Link
         className="text-teal-500 flex items-center block font-bold mt-5"
         to="/dashboard?tab=posts"
       >
         <ArrowLeft size={30} /> <span className="">Back</span>
       </Link>
+      <div></div>
     </div>
   );
 };
