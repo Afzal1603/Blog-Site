@@ -1,0 +1,63 @@
+import { Button, Textarea } from "flowbite-react";
+import { useSelector } from "react-redux";
+import Comment from "./Comment";
+import { useState } from "react";
+
+const CommentSection = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const { name, email, image } = currentUser;
+  const [content, setContent] = useState("");
+  const [remaining, setReamining] = useState(200);
+  const handleChange = (e) => {
+    const text = e.target.value;
+    setContent(e.target.value);
+    setReamining(200 - text.length);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(content);
+  };
+  return (
+    <div className="px-5">
+      {name && (
+        <div className="flex gap-2 items-center mt-6 mb-6">
+          <span className="text-slate-400 text-sm">Signed in as :</span>
+          <span className="block w-8 h-8 rounded-full overflow-hidden">
+            <img src={image} alt={name} />
+          </span>
+          <span className="text-teal-300">{email}</span>
+        </div>
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className="border-2 p-4 rounded-xl border-slate-400"
+      >
+        <Textarea
+          onChange={handleChange}
+          maxLength={200}
+          placeholder="Add a comment..."
+        ></Textarea>
+        <div className="w-full flex flex-col sm:flex-row justify-between items-center mt-8">
+          <span className="text-sm font-light mb-2 md:mb-0">
+            {remaining} characters remaining
+          </span>
+          <Button type="submit" gradientDuoTone="purpleToBlue" outline>
+            Submit
+          </Button>
+        </div>
+      </form>
+      <div className="mt-4 mb-4">
+        <div className="flex gap-3">
+          <h1>Comments</h1>
+          <span className=" border-2 border-slate-600 py-0 px-2">1</span>
+        </div>
+        <Comment></Comment>
+        <Comment></Comment>
+        <Comment></Comment>
+        <Comment></Comment>
+      </div>
+    </div>
+  );
+};
+
+export default CommentSection;

@@ -21,8 +21,11 @@ const CallToAction = () => {
           </Button>
         </Link>
       </div>
-      <div className="flex flex-1 p-2 justify-center items-center">
-        <img src="https://nordicapis.com/wp-content/uploads/A-Short-Guide-What-Types-of-Apps-Can-Be-Built-With-React.png" />
+      <div className="flex flex-1 p-2 justify-center items-center ">
+        <img
+          className="rounded-xl rounded-bl-none rounded-tr-none"
+          src="https://nordicapis.com/wp-content/uploads/A-Short-Guide-What-Types-of-Apps-Can-Be-Built-With-React.png"
+        />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Loader, ArrowLeft } from "lucide-react";
 import CallToAction from "../Component/CallToAction";
+import CommentSection from "../Component/CommentSection";
 const Post = () => {
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
@@ -49,14 +50,17 @@ const Post = () => {
           {post.content}
         </p>
       </div>
-      <CallToAction></CallToAction>
+
+      <div className="p-3">
+        <CallToAction></CallToAction>
+      </div>
+      <CommentSection></CommentSection>
       <Link
         className="text-teal-500 flex items-center block font-bold mt-5"
         to="/dashboard?tab=posts"
       >
         <ArrowLeft size={30} /> <span className="">Back</span>
       </Link>
-      <div></div>
     </div>
   );
 };
