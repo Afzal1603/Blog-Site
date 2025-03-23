@@ -9,6 +9,7 @@ import PrivateRoute from "./Component/PrivateRoute";
 import OnlyAdminRoute from "./Component/OnlyAdminRoute";
 import { CreatePost } from "./Pages/CreatePost";
 import Post from "./Pages/Post";
+import CustomFooter from "./Component/Footer";
 function App() {
   return (
     <>
@@ -26,6 +27,7 @@ function App() {
           <Route path="/post/:slug" element={<Post />}></Route>
         </Route>
       </Routes>
+      <CustomFooter />
     </>
   );
 }

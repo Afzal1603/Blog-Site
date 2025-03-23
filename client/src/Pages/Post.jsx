@@ -14,7 +14,6 @@ const Post = () => {
         const res = await axios.get(
           `http://localhost:5000/post/getposts?slug=${slug}`
         );
-        console.log(res.data.posts[0]);
         setPost(res.data.posts[0]);
       } catch (error) {
         console.log(error);
@@ -54,7 +53,7 @@ const Post = () => {
       <div className="p-3">
         <CallToAction></CallToAction>
       </div>
-      <CommentSection></CommentSection>
+      <CommentSection postId={post._id}></CommentSection>
       <Link
         className="text-teal-500 flex items-center block font-bold mt-5"
         to="/dashboard?tab=posts"

@@ -1,22 +1,78 @@
 import { Button, Textarea } from "flowbite-react";
 import { useSelector } from "react-redux";
 import Comment from "./Comment";
-import { useState } from "react";
-
-const CommentSection = () => {
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { name, email, image } = currentUser;
   const [content, setContent] = useState("");
   const [remaining, setReamining] = useState(200);
+  const [comments, setComments] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/comment/getcomment/${postId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${currentUser?.token}`, // Optional chaining
+            },
+          }
+        );
+
+        setComments(res.data.comments);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (postId) {
+      fetchComments();
+    }
+  }, [postId, refresh]);
   const handleChange = (e) => {
     const text = e.target.value;
     setContent(e.target.value);
     setReamining(200 - text.length);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(content);
+
+    if (!content.trim()) {
+      console.log("Comment cannot be empty");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/comment/create", // Fixed API URL
+        {
+          content,
+          postId,
+          userId: currentUser?._id, // Optional chaining to avoid crashes
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`, // Optional chaining
+          },
+        }
+      );
+      if (res.data.success) {
+        setContent(""); // Clear input field
+        setRefresh((prev) => !prev); // Toggle refresh ✅
+      }
+    } catch (error) {
+      console.error("Error submitting comment:", error.response?.data || error);
+    }
   };
+
   return (
     <div className="px-5">
       {name && (
@@ -25,7 +81,9 @@ const CommentSection = () => {
           <span className="block w-8 h-8 rounded-full overflow-hidden">
             <img src={image} alt={name} />
           </span>
-          <span className="text-teal-300">{email}</span>
+          <Link to="/dashboard?tab=profile">
+            <span className="text-teal-300">{email}</span>
+          </Link>
         </div>
       )}
       <form
@@ -36,6 +94,7 @@ const CommentSection = () => {
           onChange={handleChange}
           maxLength={200}
           placeholder="Add a comment..."
+          value={content}
         ></Textarea>
         <div className="w-full flex flex-col sm:flex-row justify-between items-center mt-8">
           <span className="text-sm font-light mb-2 md:mb-0">
@@ -51,10 +110,8 @@ const CommentSection = () => {
           <h1>Comments</h1>
           <span className=" border-2 border-slate-600 py-0 px-2">1</span>
         </div>
-        <Comment></Comment>
-        <Comment></Comment>
-        <Comment></Comment>
-        <Comment></Comment>
+        {comments &&
+          comments.map((value) => <Comment key={value._id} {...value} />)}
       </div>
     </div>
   );
