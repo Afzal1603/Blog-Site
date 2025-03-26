@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
+import RecentPost from "./RecentPost";
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { name, email, image } = currentUser;

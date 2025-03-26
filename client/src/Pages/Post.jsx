@@ -4,10 +4,12 @@ import { Link, useParams } from "react-router-dom";
 import { Loader, ArrowLeft } from "lucide-react";
 import CallToAction from "../Component/CallToAction";
 import CommentSection from "../Component/CommentSection";
+import RecentPost from "../Component/RecentPost";
 const Post = () => {
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState(null);
+  const [recentPost, setRecentPost] = useState(null);
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -22,6 +24,19 @@ const Post = () => {
       }
     };
     fetchPost();
+  }, [slug]);
+  useEffect(() => {
+    const fetchRecentPost = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/post/getposts?limit=3`
+        );
+        setRecentPost(res.data.posts);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRecentPost();
   }, [slug]);
   if (loading) {
     return (
@@ -54,6 +69,11 @@ const Post = () => {
         <CallToAction></CallToAction>
       </div>
       <CommentSection postId={post._id}></CommentSection>
+      <h1 className="text-center mb-4 font-medium text-xl">Recent Posts</h1>
+      <div className="flex flex-wrap justify-center gap-4 ">
+        {recentPost &&
+          recentPost.map((post) => <RecentPost key={post._id} post={post} />)}
+      </div>
       <Link
         className="text-teal-500 flex items-center block font-bold mt-5"
         to="/dashboard?tab=posts"
