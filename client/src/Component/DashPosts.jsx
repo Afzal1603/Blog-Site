@@ -21,6 +21,7 @@ const DashPosts = () => {
     setPosts((prev) => [...prev, ...res.data.posts]);
   };
   useEffect(() => {
+    console.log(currentUser);
     if (!currentUser || !currentUser.isAdmin) return;
 
     let isMounted = true;
@@ -28,8 +29,16 @@ const DashPosts = () => {
     const fetchPosts = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/post/getposts?userId=${currentUser._id}`
+          `http://localhost:5000/post/getposts?userId=${currentUser._id}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${currentUser?.token}`,
+            },
+          }
         );
+
         if (isMounted) {
           setShowPosts(res.data.posts.length > 9);
 
@@ -53,7 +62,7 @@ const DashPosts = () => {
       const res = await axios.delete(
         `http://localhost:5000/post/deletepost/${postToDelete}/${currentUser._id}`,
         {
-          withCredentials: true, // ✅ Ensures cookies are sent
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${currentUser?.token}`,

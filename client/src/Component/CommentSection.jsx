@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Comment from "./Comment";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+
 import axios from "axios";
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -12,6 +12,7 @@ const CommentSection = ({ postId }) => {
   const [remaining, setReamining] = useState(200);
   const [comments, setComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -35,6 +36,88 @@ const CommentSection = ({ postId }) => {
       fetchComments();
     }
   }, [postId, refresh]);
+
+  const handleLike = async (commentId) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/comment/likecomment/${commentId}`, // ✅ Use correct ID
+        {}, // Empty request body
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        }
+      );
+
+      const updatedComment = res.data; // ✅ Directly use response data
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                likes: updatedComment.likes,
+                likesCount: updatedComment.likesCount,
+              }
+            : comment
+        )
+      );
+    } catch (error) {
+      console.log("Error liking comment:", error.response?.data || error);
+    }
+  };
+  const handleDelete = async (commentId) => {
+    // Optimistically remove the comment from UI
+    setComments((prev) => prev.filter((comment) => comment._id !== commentId));
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/comment/deletecomment/${commentId}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        }
+      );
+
+      console.log("Comment deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+  const handleEdit = async (commentId, editContent) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/comment/updatecomment/${commentId}`,
+        { content: editContent },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        }
+      );
+      const updatedComment = res.data; // ✅ Directly use response data
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                content: updatedComment.content,
+              }
+            : comment
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleChange = (e) => {
     const text = e.target.value;
     setContent(e.target.value);
@@ -108,10 +191,23 @@ const CommentSection = ({ postId }) => {
       <div className="mt-4 mb-4">
         <div className="flex gap-3">
           <h1>Comments</h1>
-          <span className=" border-2 border-slate-600 py-0 px-2">1</span>
+          <span className=" border-2 border-slate-600 py-0 px-2">
+            {comments.length}
+          </span>
         </div>
-        {comments &&
-          comments.map((value) => <Comment key={value._id} {...value} />)}
+        {comments.length === 0 ? (
+          <p className="mt-4 ml-4 text-slate-500"> No comments yet!</p>
+        ) : (
+          comments.map((value) => (
+            <Comment
+              key={value._id}
+              {...value}
+              handleLike={handleLike}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))
+        )}
       </div>
     </div>
   );
