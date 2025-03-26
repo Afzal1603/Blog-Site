@@ -90,15 +90,32 @@ const deleteComment = async (req, res, next) => {
     return next(errorHandler(400, "Comment ID is required"));
   try {
     await Comment.findByIdAndDelete(req.params.commentId);
-    return res.status(200, "Comment deleted");
+    return res.status(200).json({ success: true, message: "Comment deleted" });
   } catch (error) {
     next(errorHandler(500, error.message));
   }
 };
+const get_Comments = async (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    return next(errorHandler(403, "Unauthorized"));
+  }
+
+  try {
+    const comments = await Comment.find();
+    if (!comments) {
+      return next(errorHandler(404, "No comments found"));
+    }
+    return res.status(200).json(comments);
+  } catch (error) {
+    return next(errorHandler(500, error.message));
+  }
+};
+
 module.exports = {
   createComment,
   getComments,
   likeComment,
   updateComment,
   deleteComment,
+  get_Comments,
 };

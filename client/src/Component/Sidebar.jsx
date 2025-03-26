@@ -7,6 +7,7 @@ import {
   HiDocument,
   HiUserGroup,
 } from "react-icons/hi";
+import { HiChatBubbleBottomCenterText } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 const SideBar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,7 +20,7 @@ const SideBar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className="md:flex md:flex-col md:gap-0.5">
+        <Sidebar.ItemGroup className="flex flex-col  gap-0.5">
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
@@ -34,6 +35,15 @@ const SideBar = () => {
           <Link to={"/dashboard?tab=posts"}>
             <Sidebar.Item active={tab === "posts"} icon={HiDocument} as="div">
               Posts
+            </Sidebar.Item>
+          </Link>
+          <Link to={"/dashboard?tab=comments"}>
+            <Sidebar.Item
+              active={tab === "comments"}
+              icon={HiChatBubbleBottomCenterText}
+              as="div"
+            >
+              Comments
             </Sidebar.Item>
           </Link>
           <Link to={"/dashboard?tab=users"}>
