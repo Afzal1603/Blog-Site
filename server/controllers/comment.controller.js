@@ -101,11 +101,39 @@ const get_Comments = async (req, res, next) => {
   }
 
   try {
-    const comments = await Comment.find();
-    if (!comments) {
-      return next(errorHandler(404, "No comments found"));
-    }
-    return res.status(200).json(comments);
+    // Extract and parse query parameters with defaults
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+
+    // Build dynamic query based on request parameters
+    const query = {
+      ...(req.query.userId && { userId: req.query.userId }),
+      ...(req.query.postId && { postId: req.query.postId }),
+      ...(req.query.commentId && { _id: req.query.commentId }),
+    };
+
+    // Fetch comments based on query, sorting, and pagination
+    const comments = await Comment.find(query)
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit)
+      .lean();
+
+    const totalComments = await Comment.countDocuments(query);
+
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    const lastMonthComments = await Comment.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    return res.status(200).json({
+      success: true,
+      comments,
+      totalComments,
+      lastMonthComments,
+    });
   } catch (error) {
     return next(errorHandler(500, error.message));
   }

@@ -6,6 +6,7 @@ import DashPosts from "../Component/DashPosts";
 import { ToastContainer } from "react-toastify";
 import DashUsers from "../Component/DashUsers";
 import DashComment from "../Component/DashComment";
+import DashboardComp from "../Component/DashboardComp";
 function DashBoard() {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -19,6 +20,7 @@ function DashBoard() {
         <SideBar></SideBar>
       </div>
       <div className="w-full overflow-x-scroll">
+        {tab === "dashboard" && <DashboardComp />}
         {tab === "profile" && <DashProfile />}
         {tab === "posts" && <DashPosts />}
         {tab === "users" && <DashUsers />}

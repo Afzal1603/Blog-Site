@@ -8,6 +8,7 @@ import {
   HiUserGroup,
 } from "react-icons/hi";
 import { HiChatBubbleBottomCenterText } from "react-icons/hi2";
+import { BiSolidDashboard } from "react-icons/bi";
 import { useSelector } from "react-redux";
 const SideBar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -30,6 +31,16 @@ const SideBar = () => {
               as="div"
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to={"/dashboard?tab=dashboard"}>
+            <Sidebar.Item
+              active={tab === "dashboard"}
+              href="#"
+              icon={BiSolidDashboard}
+              as="div"
+            >
+              Dashboard
             </Sidebar.Item>
           </Link>
           <Link to={"/dashboard?tab=posts"}>

@@ -150,7 +150,8 @@ const CommentSection = ({ postId }) => {
       );
       if (res.data.success) {
         setContent(""); // Clear input field
-        setRefresh((prev) => !prev); // Toggle refresh ✅
+        setRefresh((prev) => !prev);
+        setReamining(200);
       }
     } catch (error) {
       console.error("Error submitting comment:", error.response?.data || error);

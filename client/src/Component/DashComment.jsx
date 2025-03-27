@@ -2,15 +2,31 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Table, Modal, Button } from "flowbite-react";
+
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast, ToastContainer } from "react-toastify";
 const DashComment = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
-
+  const [showComments, setShowComments] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const handleBtnClick = async () => {
+    const startIndex = comments.length;
+    const res = await axios.get(
+      `http://localhost:5000/comment/getcomments?startIndex=${startIndex}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+      }
+    );
 
+    setShowComments(res.data.post < 9);
+    setComments((prev) => [...prev, ...res.data.comments]);
+  };
   useEffect(() => {
     if (!currentUser || !currentUser.isAdmin) return;
 
@@ -28,9 +44,10 @@ const DashComment = () => {
             },
           }
         );
-        console.log(res.data);
+
         if (isMounted) {
-          setComments(res.data);
+          setShowComments(res.data.comments.length > 9);
+          setComments(res.data.comments);
         }
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -42,7 +59,7 @@ const DashComment = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [currentUser]);
 
   const handleDelete = async () => {
     try {
@@ -76,38 +93,49 @@ const DashComment = () => {
   return (
     <div className="table-auto overflow-x-sc md:mx-auto p-3 scrollbar">
       {currentUser?.isAdmin && comments.length > 0 ? (
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Date updated</Table.HeadCell>
-            <Table.HeadCell>Comment Content</Table.HeadCell>
-            <Table.HeadCell>Number of Likes</Table.HeadCell>
-            <Table.HeadCell>POSTID</Table.HeadCell>
-            <Table.HeadCell>USERID</Table.HeadCell>
-            <Table.HeadCell>Delete</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {comments.map((comment) => (
-              <Table.Row key={comment._id}>
-                <Table.Cell>
-                  {new Date(comment.updatedAt).toLocaleDateString()}
-                </Table.Cell>
-                <Table.Cell>{comment.content}</Table.Cell>
-                <Table.Cell>{comment.likesCount}</Table.Cell>
-                <Table.Cell>{comment.postId}</Table.Cell>
-                <Table.Cell>{comment.userId}</Table.Cell>
-                <Table.Cell
-                  onClick={() => {
-                    setCommentToDelete(comment._id);
-                    setShowModal(true);
-                  }}
-                  className="font-medium text-red-500 hover:underline hover:cursor-pointer"
-                >
-                  Delete
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <>
+          <Table hoverable>
+            <Table.Head>
+              <Table.HeadCell>Date updated</Table.HeadCell>
+              <Table.HeadCell>Comment Content</Table.HeadCell>
+              <Table.HeadCell>Number of Likes</Table.HeadCell>
+              <Table.HeadCell>POSTID</Table.HeadCell>
+              <Table.HeadCell>USERID</Table.HeadCell>
+              <Table.HeadCell>Delete</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              {comments.map((comment) => (
+                <Table.Row key={comment._id}>
+                  <Table.Cell>
+                    {new Date(comment.updatedAt).toLocaleDateString()}
+                  </Table.Cell>
+                  <Table.Cell>{comment.content}</Table.Cell>
+                  <Table.Cell>{comment.likesCount}</Table.Cell>
+                  <Table.Cell>{comment.postId}</Table.Cell>
+                  <Table.Cell>{comment.userId}</Table.Cell>
+                  <Table.Cell
+                    onClick={() => {
+                      setCommentToDelete(comment._id);
+                      setShowModal(true);
+                    }}
+                    className="font-medium text-red-500 hover:underline hover:cursor-pointer"
+                  >
+                    Delete
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+
+          {showComments && (
+            <button
+              onClick={handleBtnClick}
+              className="w-full text-teal-500 self-center"
+            >
+              show more
+            </button>
+          )}
+        </>
       ) : (
         <p>No comments to show.</p>
       )}
