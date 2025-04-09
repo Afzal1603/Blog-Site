@@ -10,6 +10,9 @@ import OnlyAdminRoute from "./Component/OnlyAdminRoute";
 import { CreatePost } from "./Pages/CreatePost";
 import Post from "./Pages/Post";
 import CustomFooter from "./Component/Footer";
+import Search from "./Pages/Search";
+import About from "./Pages/About";
+import Projects from "./Pages/Projects";
 function App() {
   return (
     <>
@@ -18,6 +21,9 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/signin" element={<SignIn />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/search" element={<Search />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/project" element={<Projects />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashBoard />}></Route>
         </Route>

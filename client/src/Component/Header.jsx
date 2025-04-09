@@ -1,5 +1,5 @@
 import { Button, Navbar, TextInput, Dropdown, Avatar } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,11 +8,29 @@ import axios from "axios";
 import { updateSuccess } from "../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    const usrlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = usrlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
   const handleSignOut = async () => {
     try {
       const res = await axios.post(
@@ -36,13 +54,15 @@ function Header() {
           Blog-Site
         </span>
       </Link>
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
           color="gray"
           className="hidden md:inline"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
       <Button className="w-12 h-10 md:hidden" color="gray" pill>
@@ -104,7 +124,7 @@ function Header() {
           <Link to="/about">About</Link>
         </Navbar.Link>
         <Navbar.Link as={"div"}>
-          <Link to="/projects">Projects</Link>
+          <Link to="/project">Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
