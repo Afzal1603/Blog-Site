@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import RecentPost from "../Component/RecentPost";
 
 const Search = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  console.log(`Api ${API_BASE_URL}`);
   const { currentUser } = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const Search = () => {
         setLoading(true);
         const searchQuery = urlParams.toString();
         const res = await axios.get(
-          `http://localhost:5000/post/getposts?${searchQuery}`,
+          `${API_BASE_URL}/post/getposts?${searchQuery}`,
           {
             withCredentials: true,
             headers: {

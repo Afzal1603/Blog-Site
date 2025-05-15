@@ -7,7 +7,7 @@ import RecentPost from "../Component/RecentPost";
 
 function Home() {
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-  console.log(API_BASE_URL);
+  console.log(`Api ${API_BASE_URL}`);
   const [posts, setPosts] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   useEffect(() => {
