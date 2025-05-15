@@ -6,6 +6,8 @@ import { Table, Modal, Button } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast, ToastContainer } from "react-toastify";
 const DashComment = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const { currentUser } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(true);
@@ -14,7 +16,7 @@ const DashComment = () => {
   const handleBtnClick = async () => {
     const startIndex = comments.length;
     const res = await axios.get(
-      `http://localhost:5000/comment/getcomments?startIndex=${startIndex}`,
+      `${API_BASE_URL}/comment/getcomments?startIndex=${startIndex}`,
       {
         withCredentials: true,
         headers: {
@@ -34,16 +36,13 @@ const DashComment = () => {
 
     const fetchComments = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/comment/getcomments`,
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${currentUser?.token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_BASE_URL}/comment/getcomments`, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        });
 
         if (isMounted) {
           setShowComments(res.data.comments.length > 9);
@@ -65,7 +64,7 @@ const DashComment = () => {
     try {
       setShowModal(false);
       const res = await axios.delete(
-        `http://localhost:5000/comment/deletecomment/${commentToDelete}`,
+        `${API_BASE_URL}/comment/deletecomment/${commentToDelete}`,
         {
           withCredentials: true,
           headers: {

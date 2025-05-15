@@ -22,21 +22,21 @@ const DashboardComp = () => {
   const [commentCount, setCommentCount] = useState(null);
   const [userCount, setUserCount] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   useEffect(() => {
     if (!currentUser?.isAdmin) return;
-
     const fetchData = async () => {
       try {
         const [postsRes, usersRes, commentsRes] = await Promise.all([
-          axios.get("http://localhost:5000/post/getposts?limit=5", {
+          axios.get(`${API_BASE_URL}/post/getposts?limit=5`, {
             withCredentials: true,
             headers: { Authorization: `Bearer ${currentUser.token}` },
           }),
-          axios.get("http://localhost:5000/user/getusers?limit=5", {
+          axios.get(`${API_BASE_URL}/user/getusers?limit=5`, {
             withCredentials: true,
             headers: { Authorization: `Bearer ${currentUser.token}` },
           }),
-          axios.get("http://localhost:5000/comment/getcomments?limit=5", {
+          axios.get(`${API_BASE_URL}/comment/getcomments?limit=5`, {
             withCredentials: true,
             headers: { Authorization: `Bearer ${currentUser.token}` },
           }),

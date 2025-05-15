@@ -30,8 +30,8 @@ function App() {
         <Route element={<OnlyAdminRoute />}>
           <Route path="/create-post" element={<CreatePost />}></Route>
           <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
-          <Route path="/post/:slug" element={<Post />}></Route>
         </Route>
+        <Route path="/post/:slug" element={<Post />}></Route>
       </Routes>
       <CustomFooter />
     </>

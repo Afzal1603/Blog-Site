@@ -9,6 +9,8 @@ import { Loader } from "lucide-react";
 import OAuth from "../Component/OAuth";
 
 function SignUp() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,14 +25,11 @@ function SignUp() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
-        {
-          name: name.trim(),
-          email: email.trim(),
-          password: password.trim(),
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/auth/signup`, {
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      });
       toast.success(response.data.message);
       setName("");
       setEmail("");

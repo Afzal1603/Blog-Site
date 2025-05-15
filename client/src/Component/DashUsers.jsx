@@ -10,6 +10,8 @@ import { ImCross, ImCheckmark } from "react-icons/im";
 import { toast, ToastContainer } from "react-toastify";
 
 const DashUsers = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const { currentUser } = useSelector((state) => state.user);
   const [users, setUsers] = useState([]);
   const [showUsers, setShowUsers] = useState(true);
@@ -19,7 +21,7 @@ const DashUsers = () => {
   const handleBtnClick = async () => {
     const startIndex = users.length;
     const res = await axios.get(
-      `http://localhost:5000/user/getusers?startIndex=${startIndex}`
+      `${API_BASE_URL}/user/getusers?startIndex=${startIndex}`
     );
     setShowUsers(res.data.post < 9);
     setUsers((prev) => [...prev, ...res.data.users]);
@@ -31,7 +33,7 @@ const DashUsers = () => {
 
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/user/getusers`, {
+        const res = await axios.get(`${API_BASE_URL}/user/getusers`, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +61,7 @@ const DashUsers = () => {
     try {
       setShowModal(false);
       const res = await axios.delete(
-        `http://localhost:5000/user/deleteuser/${userToDelete}/${currentUser._id}`,
+        `${API_BASE_URL}/user/deleteuser/${userToDelete}/${currentUser._id}`,
         {
           withCredentials: true,
           headers: {

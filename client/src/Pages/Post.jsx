@@ -6,6 +6,8 @@ import CallToAction from "../Component/CallToAction";
 import CommentSection from "../Component/CommentSection";
 import RecentPost from "../Component/RecentPost";
 const Post = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState(null);
@@ -14,7 +16,7 @@ const Post = () => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/post/getposts?slug=${slug}`
+          `${API_BASE_URL}/post/getposts?slug=${slug}`
         );
         setPost(res.data.posts[0]);
       } catch (error) {
@@ -28,9 +30,7 @@ const Post = () => {
   useEffect(() => {
     const fetchRecentPost = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/post/getposts?limit=3`
-        );
+        const res = await axios.get(`${API_BASE_URL}/post/getposts?limit=3`);
         setRecentPost(res.data.posts);
       } catch (error) {
         console.log(error);

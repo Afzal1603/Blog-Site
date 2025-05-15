@@ -15,6 +15,8 @@ import {
 import OAuth from "../Component/OAuth";
 
 function SignIn() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +34,7 @@ function SignIn() {
     try {
       dispatch(signInStart());
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signin",
+        `${API_BASE_URL}/api/auth/signin`,
         {
           email: email.trim(),
           password: password.trim(),

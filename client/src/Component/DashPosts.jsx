@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { toast, ToastContainer } from "react-toastify";
 const DashPosts = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
   const [showPosts, setShowPosts] = useState(true);
@@ -15,7 +17,7 @@ const DashPosts = () => {
   const handleBtnClick = async () => {
     const startIndex = posts.length;
     const res = await axios.get(
-      `http://localhost:5000/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+      `${API_BASE_URL}/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
     );
     setShowPosts(res.data.post < 9);
     setPosts((prev) => [...prev, ...res.data.posts]);
@@ -29,7 +31,7 @@ const DashPosts = () => {
     const fetchPosts = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/post/getposts?userId=${currentUser._id}`,
+          `${API_BASE_URL}/post/getposts?userId=${currentUser._id}`,
           {
             withCredentials: true,
             headers: {
@@ -60,7 +62,7 @@ const DashPosts = () => {
     try {
       setShowModal(false);
       const res = await axios.delete(
-        `http://localhost:5000/post/deletepost/${postToDelete}/${currentUser._id}`,
+        `${API_BASE_URL}/post/deletepost/${postToDelete}/${currentUser._id}`,
         {
           withCredentials: true,
           headers: {

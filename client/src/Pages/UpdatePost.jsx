@@ -6,6 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 export const UpdatePost = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const currentUser = useSelector((state) => state.user.currentUser);
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +26,7 @@ export const UpdatePost = () => {
     const fetchPost = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/post/getposts?postId=${postId}`
+          `${API_BASE_URL}/post/getposts?postId=${postId}`
         );
         setPostData(res.data.posts[0]);
       } catch (error) {
@@ -72,7 +74,7 @@ export const UpdatePost = () => {
       return toast.error("Please fill out all fields");
     try {
       const res = await axios.put(
-        `http://localhost:5000/post/update/${postId}/${currentUser._id}`,
+        `${API_BASE_URL}/post/update/${postId}/${currentUser._id}`,
         postData,
         {
           withCredentials: true,

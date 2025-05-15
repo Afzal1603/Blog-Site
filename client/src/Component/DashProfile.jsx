@@ -17,6 +17,8 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 
 const DashProfile = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const { currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -65,7 +67,7 @@ const DashProfile = () => {
     try {
       dispatch(updateStart());
       const response = await axios.put(
-        `http://localhost:5000/user/update/${currentUser._id}`,
+        `${API_BASE_URL}/user/update/${currentUser._id}`,
         formData,
         {
           withCredentials: true, // ✅ Ensures cookies are sent
@@ -89,7 +91,7 @@ const DashProfile = () => {
     console.log(currentUser._id);
     try {
       const res = await axios.delete(
-        `http://localhost:5000/user/delete/${currentUser._id}`,
+        `${API_BASE_URL}/user/delete/${currentUser._id}`,
         {
           withCredentials: true,
           headers: {
@@ -110,7 +112,7 @@ const DashProfile = () => {
   const handleSignOut = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signout",
+        `${API_BASE_URL}/api/auth/signout`,
         {},
         { withCredentials: true } // ✅ Ensures cookies are included
       );

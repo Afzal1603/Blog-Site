@@ -13,12 +13,12 @@ const CommentSection = ({ postId }) => {
   const [remaining, setReamining] = useState(200);
   const [comments, setComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
-
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/comment/getcomment/${postId}`,
+          `${API_BASE_URL}/comment/getcomment/${postId}`,
           {
             withCredentials: true,
             headers: {
@@ -41,7 +41,7 @@ const CommentSection = ({ postId }) => {
   const handleLike = async (commentId) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/comment/likecomment/${commentId}`, // ✅ Use correct ID
+        `${API_BASE_URL}/comment/likecomment/${commentId}`, // ✅ Use correct ID
         {}, // Empty request body
         {
           withCredentials: true,
@@ -74,16 +74,13 @@ const CommentSection = ({ postId }) => {
     setComments((prev) => prev.filter((comment) => comment._id !== commentId));
 
     try {
-      await axios.delete(
-        `http://localhost:5000/comment/deletecomment/${commentId}`,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${currentUser?.token}`,
-          },
-        }
-      );
+      await axios.delete(`${API_BASE_URL}/comment/deletecomment/${commentId}`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+      });
 
       console.log("Comment deleted successfully.");
     } catch (error) {
@@ -93,7 +90,7 @@ const CommentSection = ({ postId }) => {
   const handleEdit = async (commentId, editContent) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/comment/updatecomment/${commentId}`,
+        `${API_BASE_URL}/comment/updatecomment/${commentId}`,
         { content: editContent },
         {
           withCredentials: true,
@@ -134,7 +131,7 @@ const CommentSection = ({ postId }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/comment/create", // Fixed API URL
+        "${API_BASE_URL}/comment/create", // Fixed API URL
         {
           content,
           postId,

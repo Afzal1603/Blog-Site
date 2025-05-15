@@ -12,6 +12,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const OAuth = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = getAuth(app);
@@ -28,7 +30,7 @@ const OAuth = () => {
       console.log(data);
       dispatch(signInStart());
       const response = await axios.post(
-        "http://localhost:5000/api/auth/google",
+        `${API_BASE_URL}/api/auth/google`,
         data,
         { withCredentials: true }
       );

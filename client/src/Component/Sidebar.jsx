@@ -33,35 +33,49 @@ const SideBar = () => {
               Profile
             </Sidebar.Item>
           </Link>
-          <Link to={"/dashboard?tab=dashboard"}>
-            <Sidebar.Item
-              active={tab === "dashboard"}
-              href="#"
-              icon={BiSolidDashboard}
-              as="div"
-            >
-              Dashboard
-            </Sidebar.Item>
-          </Link>
-          <Link to={"/dashboard?tab=posts"}>
-            <Sidebar.Item active={tab === "posts"} icon={HiDocument} as="div">
-              Posts
-            </Sidebar.Item>
-          </Link>
-          <Link to={"/dashboard?tab=comments"}>
-            <Sidebar.Item
-              active={tab === "comments"}
-              icon={HiChatBubbleBottomCenterText}
-              as="div"
-            >
-              Comments
-            </Sidebar.Item>
-          </Link>
-          <Link to={"/dashboard?tab=users"}>
-            <Sidebar.Item active={tab === "users"} icon={HiUserGroup} as="div">
-              Users
-            </Sidebar.Item>
-          </Link>
+          {currentUser.isAdmin ? (
+            <>
+              <Link to={"/dashboard?tab=dashboard"}>
+                <Sidebar.Item
+                  active={tab === "dashboard"}
+                  href="#"
+                  icon={BiSolidDashboard}
+                  as="div"
+                >
+                  Dashboard
+                </Sidebar.Item>
+              </Link>
+              <Link to={"/dashboard?tab=posts"}>
+                <Sidebar.Item
+                  active={tab === "posts"}
+                  icon={HiDocument}
+                  as="div"
+                >
+                  Posts
+                </Sidebar.Item>
+              </Link>
+              <Link to={"/dashboard?tab=comments"}>
+                <Sidebar.Item
+                  active={tab === "comments"}
+                  icon={HiChatBubbleBottomCenterText}
+                  as="div"
+                >
+                  Comments
+                </Sidebar.Item>
+              </Link>
+              <Link to={"/dashboard?tab=users"}>
+                <Sidebar.Item
+                  active={tab === "users"}
+                  icon={HiUserGroup}
+                  as="div"
+                >
+                  Users
+                </Sidebar.Item>
+              </Link>
+            </>
+          ) : (
+            <></>
+          )}
           <Link to={"/"}>
             <Sidebar.Item href="#" icon={HiArrowCircleLeft} as="div">
               Back

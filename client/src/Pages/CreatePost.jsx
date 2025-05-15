@@ -6,6 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 export const CreatePost = () => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const currentUser = useSelector((state) => state.user.currentUser);
   const [img, setImg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,17 +53,13 @@ export const CreatePost = () => {
     if (!postData.title || !postData.content)
       return toast.error("Please fill out all fields");
     try {
-      const res = await axios.post(
-        "http://localhost:5000/post/create",
-        postData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${currentUser?.token}`,
-          },
-        }
-      );
+      const res = await axios.post(`${API_BASE_URL}/post/create`, postData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+      });
       console.log(res.data);
       toast.success("Post created successfully");
       setPostData({ title: "", content: "" });

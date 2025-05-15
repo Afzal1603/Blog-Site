@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { Textarea, Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 dayjs.extend(relativeTime);
+
 const Comment = ({
   _id,
   userId,
@@ -18,6 +19,7 @@ const Comment = ({
   onEdit,
   onDelete,
 }) => {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -28,9 +30,7 @@ const Comment = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/user/getuser/${userId}`
-        );
+        const res = await axios.get(`${API_BASE_URL}/user/getuser/${userId}`);
         setUser(res.data.user[0]);
         setError(null);
       } catch (error) {
