@@ -77,16 +77,18 @@ function Header() {
       >
         <Button
           color="gray"
-          className="w-12 h-10 flex justify-center items-center hidden sm:inline"
+          aria-label="Toggle theme"
+          className="w-12 h-10 flex justify-center items-center sm:inline transition duration-300"
           pill
           onClick={() => dispatch(toggleTheme())}
         >
           {theme === "dark" ? (
-            <FaSun className="w-5 h-5" />
+            <FaSun className="w-[500px] h-[15px]" />
           ) : (
-            <FaMoon className="w-5 h-5" />
+            <FaMoon className="w-[500px] h-[15px]" />
           )}
         </Button>
+
         {currentUser ? (
           <Dropdown
             arrowIcon={false}
