@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import RecentPost from "../Component/RecentPost";
 
 function Home() {
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/";
 
   const [posts, setPosts] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
@@ -17,7 +17,7 @@ function Home() {
 
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/post/getposts?limit=9`, {
+        const res = await axios.get(`${API_BASE_URL}post/getposts?limit=9`, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
