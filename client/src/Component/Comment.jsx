@@ -124,18 +124,21 @@ const Comment = ({
               </span>
               {((currentUser && currentUser._id === userId) ||
                 currentUser.isAdmin) && (
-                <button onClick={handleEdit} className="hover:text-blue-500">
-                  Edit
-                </button>
+                <>
+                  <button onClick={handleEdit} className="hover:text-blue-500">
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                    className="hover:text-red-500"
+                  >
+                    Delete
+                  </button>
+                </>
               )}
-              <button
-                onClick={() => {
-                  setShowModal(true);
-                }}
-                className="hover:text-red-500"
-              >
-                Delete
-              </button>
             </div>
           </>
         )}
