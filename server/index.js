@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://blog-site-aqhbk4gj1-mohd-afzal-ansaris-projects.vercel.app",
+      "https://blog-site-eight-weld.vercel.app",
       "http://localhost:5173",
     ],
     methods: "GET,POST,PUT,DELETE",
