@@ -16,12 +16,15 @@ dbConnect();
 app.use(express.json());
 app.use(
   cors({
-    origin:
-      "https://blog-site-eight-weld.vercel.app/" || "http://localhost:5173",
+    origin: [
+      "https://blog-site-eight-weld.vercel.app",
+      "http://localhost:5173",
+    ],
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/user", userRouter);
