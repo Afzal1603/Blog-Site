@@ -131,7 +131,7 @@ const CommentSection = ({ postId }) => {
 
     try {
       const res = await axios.post(
-        "${API_BASE_URL}/comment/create", // Fixed API URL
+        `${API_BASE_URL}/comment/create`, // Fixed API URL
         {
           content,
           postId,
