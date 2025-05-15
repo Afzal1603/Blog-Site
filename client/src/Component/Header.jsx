@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 function Header() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ function Header() {
   const handleSignOut = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signout",
+        "${API_BASE_URL}/api/auth/signout",
         {},
         { withCredentials: true } // ✅ Ensures cookies are included
       );
