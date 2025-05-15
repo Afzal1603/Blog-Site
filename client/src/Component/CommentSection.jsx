@@ -13,12 +13,12 @@ const CommentSection = ({ postId }) => {
   const [remaining, setReamining] = useState(200);
   const [comments, setComments] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/";
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const res = await axios.get(
-          `${API_BASE_URL}comment/getcomment/${postId}`,
+          `${API_BASE_URL}/comment/getcomment/${postId}`,
           {
             withCredentials: true,
             headers: {
@@ -41,7 +41,7 @@ const CommentSection = ({ postId }) => {
   const handleLike = async (commentId) => {
     try {
       const res = await axios.put(
-        `${API_BASE_URL}comment/likecomment/${commentId}`, // ✅ Use correct ID
+        `${API_BASE_URL}/comment/likecomment/${commentId}`, // ✅ Use correct ID
         {}, // Empty request body
         {
           withCredentials: true,
