@@ -35,7 +35,7 @@ function Header() {
   const handleSignOut = async () => {
     try {
       const res = await axios.post(
-        "${API_BASE_URL}/api/auth/signout",
+        `${API_BASE_URL}/api/auth/signout`,
         {},
         { withCredentials: true } // ✅ Ensures cookies are included
       );
